@@ -14,10 +14,9 @@ int main(){
         exit(1);
     }//if
     string entrada;
-    int suma;
     while(getline(archivo, entrada) != NULL)
     {
-        suma = 0;
+        int suma = 0;
         int num = stoi(entrada, &st);
         cout<<num;
         while(num > 0)
