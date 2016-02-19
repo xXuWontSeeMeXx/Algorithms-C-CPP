@@ -14,9 +14,10 @@ int main(){
         exit(1);
     }//if
     string entrada;
-    int suma = 0;
+    int suma;
     while(getline(archivo, entrada) != NULL)
     {
+        suma = 0;
         int num = stoi(entrada, &st);
         cout<<num;
         while(num > 0)
@@ -24,7 +25,7 @@ int main(){
             suma += num % 10;
             num /= 10;
         }//while
+        cout<<" sum = "<<suma<<endl;
     }//while
-    cout<<" sum = "<<suma<<endl;
     return 0;
 }//main
