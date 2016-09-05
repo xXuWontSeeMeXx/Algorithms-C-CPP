@@ -38,6 +38,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<ctype.h>
 
 char * toUpperCase(char entrada[512]){
     int i;
@@ -48,50 +49,44 @@ char * toUpperCase(char entrada[512]){
 
 char * cryptCadena(char cadena[], int size){
     const char KEYWORD[] = "MURCIELAGO";
-    const char DIGITS[]  = "0123456789";
-    char *strBytes = malloc(sizeof(char) + 1 + 1);
+    const char DIGITS[]  = "0123456789";        
+    char *strBytes = malloc( sizeof(char) );
     sprintf(strBytes, "(BYTE %i)", size);
     int i;
     int j;
-    for(i = 0; i < strlen(cadena); ++i)
+    for(i = 0; cadena[i] != '\0'; i++)
     {
-        for(j = 0; j < strlen(KEYWORD); ++j)
+        for(j = 0; j < strlen(KEYWORD); j++)
             if(cadena[i] == KEYWORD[j])
                 cadena[i] = DIGITS[j];
     }//for
-    strcat(strBytes, cadena);
+    sprintf(strBytes,"%s%s",strBytes,cadena);
     return strBytes;
 }//cryptCadena
 
 void execute(){
     FILE *archivo;
     archivo = fopen("archivo.txt", "rt");
-    char entrada[512];
-    char *input = malloc(strlen(entrada) + 1 + 1);
+    char entrada[512] = {0};
+    char *input = NULL;
+    char* palabra = NULL;
     while(fgets(entrada, 512, archivo) != NULL) 
     {
         input = toUpperCase(entrada);
-        input[strlen(input)] = ' ';
-        char *cadena = malloc(strlen(entrada) + 1 + 1);
-        int index = 0;
-        int i;
-        for(i = 0; i < strlen(input); ++i)
+        palabra = strtok(input, " \n\r\0");
+        while(palabra != NULL)
         {
-            if(input[i] == ' ')
-            {
-                cadena = cryptCadena(cadena, strlen(cadena));
-                printf("%s", cadena);
-                memset(cadena, 0, strlen(cadena));
-                index = 0;
-            }//if
-            else
-                cadena[index++] = input[i];
-        }//for
+            palabra = cryptCadena(palabra, strlen(palabra));
+            printf("%s", palabra);
+            palabra = strtok(NULL, " \n\r\0");
+        }
+        printf("\n");               
     }//while 
     fclose(archivo);
+    free(palabra); 
 }//execute
 
-int main(){
+int main(void){
     execute();
     return 0;
 }//main
